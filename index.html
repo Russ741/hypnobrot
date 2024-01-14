@@ -3,6 +3,8 @@
         <script>
             // See https://developer.mozilla.org/en-US/docs/Web/API/WebGL_API/Tutorial/Getting_started_with_WebGL#preparing_the_webgl_context
 
+            // TODO: Prepend fragment shader with the ShaderToy inputs.
+            // TODO: Prepend fragment shader with a main() to wrap mainImage.
             function setupShader(gl, sourceId, shaderType) {
                 const source = document.getElementById(sourceId).innerHTML;
                 const shader = gl.createShader(shaderType);
@@ -13,6 +15,20 @@
                     throw new Error(`Error compiling "${sourceId}": ${gl.getShaderInfoLog(shader)}`);
                 }
                 return shader;
+            }
+
+            function drawDisplayPolygon(gl, a_position) {
+                // See https://github.com/mdn/dom-examples/blob/main/webgl-examples/tutorial/sample2/init-buffers.js
+                const positionBuffer = gl.createBuffer();
+                gl.bindBuffer(gl.ARRAY_BUFFER, positionBuffer);
+
+                const positions = [-1.0, -1.0, -1.0, 1.0, 1.0, -1.0, 1.0, 1.0];
+                gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(positions), gl.STATIC_DRAW);
+
+                gl.vertexAttribPointer(a_position, 2, gl.FLOAT, false, 0, 0);
+                gl.enableVertexAttribArray(a_position);
+
+                gl.drawArrays(gl.TRIANGLE_STRIP, 0, 4);
             }
 
             function initCanvas(canvasId) {
@@ -33,23 +49,26 @@
                 gl.linkProgram(program);
                 gl.useProgram(program);
 
-                gl.drawArrays(gl.POINTS, 0, 1);
+                const a_position = gl.getAttribLocation(program, "aVertexPosition");
+                drawDisplayPolygon(gl, a_position);
             }
         </script>
 
         <script type="x-shader/x-vertex" id="viewport-vertex">
             #version 100
 
+            attribute vec4 aVertexPosition;
+
             void main() {
-                gl_Position = vec4(0.0, 0.0, 0.0, 1.0);
-                gl_PointSize = 64.0;
+                gl_Position = aVertexPosition;
             }
         </script>
         <script type="x-shader/x-fragment" id="fragment-shader">
             #version 100
 
             void main() {
-                gl_FragColor = vec4(0.0, 0.5, 1.0, 0.75);
+                /* TODO: Provide and use iResolution rather than hardcoded numbers. */
+                gl_FragColor = vec4(gl_FragCoord.x / 300.0, gl_FragCoord.y / 150.0, 0.0, 1.0);
             }
         </script>
     </head>
