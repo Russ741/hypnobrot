@@ -1,5 +1,24 @@
 <html>
+    <head>
+        <script>
+            // See https://developer.mozilla.org/en-US/docs/Web/API/WebGL_API/Tutorial/Getting_started_with_WebGL#preparing_the_webgl_context
+            function initCanvas(canvasId) {
+                const canvas = document.getElementById(canvasId);
+
+                // See https://developer.mozilla.org/en-US/docs/Web/API/WebGLRenderingContext
+                const gl = canvas.getContext("webgl");
+
+                gl.clearColor(0, 0, 0, 1);
+                gl.clear(gl.COLOR_BUFFER_BIT);
+            }
+        </script>
+    </head>
     <body>
-        TODO: Put Hypnobrot here.
+        <canvas id="hypnobrot">
+
+        </canvas>
+        <script>
+            initCanvas("hypnobrot");
+        </script>
     </body>
 </html>
