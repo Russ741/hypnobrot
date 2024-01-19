@@ -11,7 +11,7 @@
                 gl.compileShader(shader);
 
                 if (!gl.getShaderParameter(shader, gl.COMPILE_STATUS)) {
-                    throw new Error(`Error compiling "${sourceId}": ${gl.getShaderInfoLog(shader)}`);
+                    throw new Error(`Error compiling "${shaderType}": ${gl.getShaderInfoLog(shader)}`);
                 }
                 return shader;
             }
