@@ -5,8 +5,7 @@
 
             // TODO: Prepend fragment shader with the ShaderToy inputs.
             // TODO: Prepend fragment shader with a main() to wrap mainImage.
-            function setupShader(gl, sourceId, shaderType) {
-                const source = document.getElementById(sourceId).innerHTML;
+            function setupShader(gl, source, shaderType) {
                 const shader = gl.createShader(shaderType);
                 gl.shaderSource(shader, source);
                 gl.compileShader(shader);
@@ -32,7 +31,7 @@
             }
 
             function initCanvas(canvasId) {
-                const canvas = document.getElementById(canvasId);
+                                const canvas = document.getElementById(canvasId);
 
                 // See https://developer.mozilla.org/en-US/docs/Web/API/WebGLRenderingContext
                 const gl = canvas.getContext("webgl");
@@ -40,8 +39,8 @@
                 gl.clearColor(0, 0, 0, 1);
                 gl.clear(gl.COLOR_BUFFER_BIT);
 
-                const vertexShader = setupShader(gl, "viewport-vertex", gl.VERTEX_SHADER);
-                const fragmentShader = setupShader(gl, "fragment-shader", gl.FRAGMENT_SHADER);
+                const vertexShader = setupShader(gl, document.getElementById("viewport-vertex").innerHTML, gl.VERTEX_SHADER);
+                const fragmentShader = setupShader(gl, document.getElementById("fragment-shader").innerHTML, gl.FRAGMENT_SHADER);
 
                 const program = gl.createProgram();
                 gl.attachShader(program, vertexShader);
