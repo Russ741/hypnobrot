@@ -3,6 +3,18 @@
         <script>
             // See https://developer.mozilla.org/en-US/docs/Web/API/WebGL_API/Tutorial/Getting_started_with_WebGL#preparing_the_webgl_context
 
+            const PREPEND_TO_FRAGMENT_PROGRAM =
+`#version 100
+
+precision mediump float;
+
+void mainImage( out vec4 fragColor, in vec2 fragCoord );
+
+void main() {
+    mainImage(gl_FragColor, gl_FragCoord.xy);
+}
+
+`;
             // TODO: Prepend fragment shader with the ShaderToy inputs.
             // TODO: Prepend fragment shader with a main() to wrap mainImage.
             function setupShader(gl, source, shaderType) {
@@ -44,7 +56,7 @@
                 gl.clear(gl.COLOR_BUFFER_BIT);
 
                 const vertexShader = setupShader(gl, document.getElementById("viewport-vertex").innerHTML, gl.VERTEX_SHADER);
-                const fragmentSource = await fetchFragmentShaderSource("fragment.glsl");
+                const fragmentSource = PREPEND_TO_FRAGMENT_PROGRAM + await fetchFragmentShaderSource("fragment.glsl");
                 const fragmentShader = setupShader(gl, fragmentSource, gl.FRAGMENT_SHADER);
 
                 const program = gl.createProgram();
