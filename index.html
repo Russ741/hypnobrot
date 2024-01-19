@@ -30,7 +30,11 @@
                 gl.drawArrays(gl.TRIANGLE_STRIP, 0, 4);
             }
 
-            function initCanvas(canvasId) {
+            async function fetchFragmentShaderSource(url) {
+                return (await fetch(url)).text();
+            }
+
+            async function initCanvas(canvasId) {
                                 const canvas = document.getElementById(canvasId);
 
                 // See https://developer.mozilla.org/en-US/docs/Web/API/WebGLRenderingContext
@@ -40,7 +44,8 @@
                 gl.clear(gl.COLOR_BUFFER_BIT);
 
                 const vertexShader = setupShader(gl, document.getElementById("viewport-vertex").innerHTML, gl.VERTEX_SHADER);
-                const fragmentShader = setupShader(gl, document.getElementById("fragment-shader").innerHTML, gl.FRAGMENT_SHADER);
+                const fragmentSource = await fetchFragmentShaderSource("fragment.glsl");
+                const fragmentShader = setupShader(gl, fragmentSource, gl.FRAGMENT_SHADER);
 
                 const program = gl.createProgram();
                 gl.attachShader(program, vertexShader);
@@ -60,14 +65,6 @@
 
             void main() {
                 gl_Position = aVertexPosition;
-            }
-        </script>
-        <script type="x-shader/x-fragment" id="fragment-shader">
-            #version 100
-
-            void main() {
-                /* TODO: Provide and use iResolution rather than hardcoded numbers. */
-                gl_FragColor = vec4(gl_FragCoord.x / 300.0, gl_FragCoord.y / 150.0, 0.0, 1.0);
             }
         </script>
     </head>
