@@ -82,7 +82,7 @@ void main() {
 
                 const iResolution = gl.getUniformLocation(program, "iResolution");
                 // TODO: Set the third variable to the correct pixel aspect ratio.
-                gl.uniform3fv(iResolution, [canvas.width, canvas.height, 1.0]);
+                gl.uniform3fv(iResolution, [canvas.width, canvas.height, window.devicePixelRatio]);
 
                 const a_position = gl.getAttribLocation(program, "aVertexPosition");
                 drawDisplayPolygon(gl, a_position, iResolution);
