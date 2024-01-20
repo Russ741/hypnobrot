@@ -68,8 +68,8 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
     float startURange = 3.;
     float startVRange = 3.;
 
-    float uFrameScale = pow(0.99, float(iTime) / 60.0);
-    float vFrameScale = pow(0.99, float(iTime) / 60.0);
+    float uFrameScale = pow(0.99, iTime * 60.0);
+    float vFrameScale = pow(0.99, iTime * 60.0);
 
     float uRange = startURange * uFrameScale;
     float vRange = startVRange  * vFrameScale;

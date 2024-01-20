@@ -30,8 +30,12 @@ void main() {
 }
 
 `;
-            // TODO: Prepend fragment shader with the ShaderToy inputs.
-            // TODO: Prepend fragment shader with a main() to wrap mainImage.
+
+            var iTime;
+            var aVertexPosition;
+            var iResolution;
+            var startTimeMs;
+
             function setupShader(gl, source, shaderType) {
                 const shader = gl.createShader(shaderType);
                 gl.shaderSource(shader, source);
@@ -43,7 +47,7 @@ void main() {
                 return shader;
             }
 
-            function drawDisplayPolygon(gl, a_position, iResolution) {
+            function drawDisplayPolygon(gl) {
                 // See https://github.com/mdn/dom-examples/blob/main/webgl-examples/tutorial/sample2/init-buffers.js
                 const positionBuffer = gl.createBuffer();
                 gl.bindBuffer(gl.ARRAY_BUFFER, positionBuffer);
@@ -51,14 +55,23 @@ void main() {
                 const positions = [-1.0, -1.0, -1.0, 1.0, 1.0, -1.0, 1.0, 1.0];
                 gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(positions), gl.STATIC_DRAW);
 
-                gl.vertexAttribPointer(a_position, 2, gl.FLOAT, false, 0, 0);
-                gl.enableVertexAttribArray(a_position);
+                gl.vertexAttribPointer(aVertexPosition, 2, gl.FLOAT, false, 0, 0);
+                gl.enableVertexAttribArray(aVertexPosition);
 
                 gl.drawArrays(gl.TRIANGLE_STRIP, 0, 4);
             }
 
             async function fetchFragmentShaderSource(url) {
                 return (await fetch(url)).text();
+            }
+
+            function animateScene(gl) {
+                const secondsPassed = (performance.now() - startTimeMs) / 1000.0;
+                gl.uniform1f(iTime, secondsPassed);
+                drawDisplayPolygon(gl);
+                requestAnimationFrame(() => {
+                    animateScene(gl);
+                });
             }
 
             async function initCanvas(canvasId) {
@@ -80,12 +93,15 @@ void main() {
                 gl.linkProgram(program);
                 gl.useProgram(program);
 
-                const iResolution = gl.getUniformLocation(program, "iResolution");
+                iResolution = gl.getUniformLocation(program, "iResolution");
+                iTime = gl.getUniformLocation(program, "iTime");
+                aVertexPosition = gl.getAttribLocation(program, "aVertexPosition");
+
                 // TODO: Set the third variable to the correct pixel aspect ratio.
                 gl.uniform3fv(iResolution, [canvas.width, canvas.height, window.devicePixelRatio]);
 
-                const a_position = gl.getAttribLocation(program, "aVertexPosition");
-                drawDisplayPolygon(gl, a_position, iResolution);
+                startTimeMs = performance.now();
+                animateScene(gl);
             }
         </script>
     </head>
