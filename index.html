@@ -20,8 +20,10 @@ precision mediump float;
 
 void mainImage( out vec4 fragColor, in vec2 fragCoord );
 
+out vec4 fragColor;
+
 void main() {
-    mainImage(gl_FragColor, gl_FragCoord.xy);
+    mainImage(fragColor, gl_FragCoord.xy);
 }
 
 `;
