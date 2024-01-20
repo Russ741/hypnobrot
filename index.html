@@ -4,9 +4,9 @@
             // See https://developer.mozilla.org/en-US/docs/Web/API/WebGL_API/Tutorial/Getting_started_with_WebGL#preparing_the_webgl_context
 
 const VERTEX_PROGRAM =
-`#version 100
+`#version 300 es
 
-attribute vec4 aVertexPosition;
+in vec4 aVertexPosition;
 
 void main() {
     gl_Position = aVertexPosition;
@@ -14,7 +14,7 @@ void main() {
 `;
 
             const PREPEND_TO_FRAGMENT_PROGRAM =
-`#version 100
+`#version 300 es
 
 precision mediump float;
 
@@ -60,7 +60,7 @@ void main() {
                 const canvas = document.getElementById(canvasId);
 
                 // See https://developer.mozilla.org/en-US/docs/Web/API/WebGLRenderingContext
-                const gl = canvas.getContext("webgl");
+                const gl = canvas.getContext("webgl2");
 
                 gl.clearColor(0, 0, 0, 1);
                 gl.clear(gl.COLOR_BUFFER_BIT);
