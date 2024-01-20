@@ -3,6 +3,16 @@
         <script>
             // See https://developer.mozilla.org/en-US/docs/Web/API/WebGL_API/Tutorial/Getting_started_with_WebGL#preparing_the_webgl_context
 
+const VERTEX_PROGRAM =
+`#version 100
+
+attribute vec4 aVertexPosition;
+
+void main() {
+    gl_Position = aVertexPosition;
+}
+`;
+
             const PREPEND_TO_FRAGMENT_PROGRAM =
 `#version 100
 
@@ -55,7 +65,7 @@ void main() {
                 gl.clearColor(0, 0, 0, 1);
                 gl.clear(gl.COLOR_BUFFER_BIT);
 
-                const vertexShader = setupShader(gl, document.getElementById("viewport-vertex").innerHTML, gl.VERTEX_SHADER);
+                const vertexShader = setupShader(gl, VERTEX_PROGRAM, gl.VERTEX_SHADER);
                 const fragmentSource = PREPEND_TO_FRAGMENT_PROGRAM + await fetchFragmentShaderSource("fragment.glsl");
                 const fragmentShader = setupShader(gl, fragmentSource, gl.FRAGMENT_SHADER);
 
@@ -67,16 +77,6 @@ void main() {
 
                 const a_position = gl.getAttribLocation(program, "aVertexPosition");
                 drawDisplayPolygon(gl, a_position);
-            }
-        </script>
-
-        <script type="x-shader/x-vertex" id="viewport-vertex">
-            #version 100
-
-            attribute vec4 aVertexPosition;
-
-            void main() {
-                gl_Position = aVertexPosition;
             }
         </script>
     </head>
