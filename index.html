@@ -18,6 +18,9 @@ void main() {
 
 precision mediump float;
 
+uniform vec3      iResolution;
+uniform float     iTime;
+
 void mainImage( out vec4 fragColor, in vec2 fragCoord );
 
 out vec4 fragColor;
@@ -40,7 +43,7 @@ void main() {
                 return shader;
             }
 
-            function drawDisplayPolygon(gl, a_position) {
+            function drawDisplayPolygon(gl, a_position, iResolution) {
                 // See https://github.com/mdn/dom-examples/blob/main/webgl-examples/tutorial/sample2/init-buffers.js
                 const positionBuffer = gl.createBuffer();
                 gl.bindBuffer(gl.ARRAY_BUFFER, positionBuffer);
@@ -77,13 +80,17 @@ void main() {
                 gl.linkProgram(program);
                 gl.useProgram(program);
 
+                const iResolution = gl.getUniformLocation(program, "iResolution");
+                // TODO: Set the third variable to the correct pixel aspect ratio.
+                gl.uniform3fv(iResolution, [canvas.width, canvas.height, 1.0]);
+
                 const a_position = gl.getAttribLocation(program, "aVertexPosition");
-                drawDisplayPolygon(gl, a_position);
+                drawDisplayPolygon(gl, a_position, iResolution);
             }
         </script>
     </head>
     <body>
-        <canvas id="hypnobrot">
+        <canvas id="hypnobrot" height="360" width="640">
 
         </canvas>
         <script>
