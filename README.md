@@ -4,6 +4,8 @@ A fragment shader depicting an animated Mandelbrot curve, lovingly rendered in L
 
 Check it out **[here](https://russ741.github.io/hypnobrot/)**.
 
+![A screenshot of a Mandelbrot curve in vivid colors.](/hypnobrot.png)
+
 ## Developer Notes
 
 I originally developed it on [ShaderToy](https://www.shadertoy.com/view/dl2yWW), a great environment for learning how to write fragment shaders in GLSL.\n
